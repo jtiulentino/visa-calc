@@ -1,9 +1,5 @@
-import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-
-function yearArr() {
-    
-}
+import React, { useState } from 'react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceArea } from 'recharts';
 
 const data = [
   {
@@ -51,6 +47,27 @@ const data = [
 ];
 
 function Chart() {
+    const [refAreaLeft, setRefAreaLeft] = useState(null);
+    const [refAreaRight, setRefAreaRight] = useState(null);
+    const [activeDraw, setActiveDraw] = useState(false);
+
+    function handleMouseMove(e) {
+        if (activeDraw && e?.activeLabel) {
+            setRefAreaRight(e.activeLabel);
+        }
+    }
+
+    function handleClick(e) {
+        if (!activeDraw && e?.activeLabel) {
+            setActiveDraw(true);
+            setRefAreaLeft(e.activeLabel);
+        }
+
+        if (activeDraw && e?.activeLabel) {
+            setActiveDraw(false);
+            setRefAreaRight(e.activeLabel);
+        }
+    }
 
     return (
         <ResponsiveContainer>
@@ -62,6 +79,8 @@ function Chart() {
                     left: 10,
                     bottom: 5,
                 }}
+                onMouseMove={handleMouseMove}
+                onClick={handleClick}
             >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="date" />
@@ -69,6 +88,9 @@ function Chart() {
                 <Tooltip />
                 <Legend />
                 <Bar dataKey="pv" fill="#8884d8" />
+                {refAreaLeft && refAreaRight ? (
+                    <ReferenceArea x1={refAreaLeft} x2={refAreaRight} strokeOpacity={0.5} />
+                ) : null}
             </BarChart>
         </ResponsiveContainer>
     );
