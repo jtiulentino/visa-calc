@@ -5,7 +5,7 @@ import Chart from './Chart';
 function App() {
     return (
         <ChakraProvider>
-            <Flex height="100vh" width="100%" flexDir="column">
+            <Flex height="30vh" width="100%" flexDir="column">
                 <Chart />
             </Flex>
         </ChakraProvider>

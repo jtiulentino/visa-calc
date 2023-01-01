@@ -1,50 +1,62 @@
 import React, { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceArea } from 'recharts';
 
-const data = [
-  {
-    date: 'Page A',
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    date: 'Page B',
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    date: 'Page C',
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    date: 'Page D',
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    date: 'Page E',
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    date: 'Page F',
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    date: 'Page G',
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-];
+function getDatesBetween(startDate, endDate) {
+    const dates = [];
+    const currentDate = startDate;
+    while (currentDate <= endDate) {
+        dates.push(new Date(currentDate));
+        currentDate.setUTCDate(currentDate.getUTCDate() + 1);
+    }
+
+    return dates;
+}
+
+const calc = () => {
+    const startDate = new Date('2022-01-01');
+    const endDate = new Date('2022-10-28');
+    const dates = getDatesBetween(startDate, endDate);
+
+    const calcdates = getDatesBetween(new Date('2021-01-01'), new Date('2022-10-28'));
+    
+    const dateToNumberMap = new Map();
+
+    var i = 0
+    calcdates.forEach((e) => dateToNumberMap.set(e.toISOString(), i));
+    console.log('map', dateToNumberMap)
+
+    const counterArr = new Array(calcdates.length).fill(90)
+
+    const periods = [
+        [new Date('2022-01-01').toISOString(), new Date('2022-02-28').toISOString()], 
+        //[new Date('2022-01-01').toISOString(), new Date('2022-02-28').toISOString()], 
+        [new Date('2022-04-26').toISOString(), new Date('2022-05-30').toISOString()],
+        //[new Date('2022-01-01').toISOString(), new Date('2022-03-30').toISOString()], 
+    ]
+
+    periods.forEach((p) => {
+        var start = p[0]
+        var end = p[1]
+
+
+        var indexStart = dateToNumberMap.get(start)
+        var indexEnd = dateToNumberMap.get(end)
+        console.log('st', start, end, indexStart, indexEnd)
+
+        for (let index = indexStart; index <= indexEnd; index) {
+            for (let i = index; i < index+180; i++) {
+                counterArr[i] -= 1
+            }
+        }
+
+
+    })
+
+
+    var arr = []
+    dates.forEach((e) => { arr.push({ date: e.toISOString(), pv: counterArr[dateToNumberMap.get(e.toISOString())] }) })
+    return arr
+}
 
 function Chart() {
     const [refAreaLeft, setRefAreaLeft] = useState(null);
@@ -68,6 +80,9 @@ function Chart() {
             setRefAreaRight(e.activeLabel);
         }
     }
+
+    // const data = calc();
+    const data = null;
 
     return (
         <ResponsiveContainer>
