@@ -13,11 +13,11 @@ function getDatesBetween(startDate, endDate) {
 }
 
 const calc = () => {
-    const startDate = new Date('2022-01-01');
-    const endDate = new Date('2022-12-28');
+    const startDate = new Date('2022-12-01');
+    const endDate = new Date('2023-12-28');
     const dates = getDatesBetween(startDate, endDate);
 
-    const calcdates = getDatesBetween(new Date('2022-01-01'), new Date('2023-12-28'));
+    const calcdates = getDatesBetween(new Date('2022-12-01'), new Date('2024-12-28'));
     
     const dateToNumberMap = new Map();
 
@@ -32,8 +32,8 @@ const calc = () => {
     const wasThere = new Array(calcdates.length).fill(0)
 
     const periods = [
-        [new Date('2022-01-01').toISOString(), new Date('2022-01-28').toISOString()],
-        //[new Date('2022-04-01').toISOString(), new Date('2022-04-28').toISOString()], 
+        [new Date('2022-12-30').toISOString(), new Date('2023-02-26').toISOString()],
+        [new Date('2023-04-26').toISOString(), new Date('2023-05-22').toISOString()], 
         //[new Date('2022-06-01').toISOString(), new Date('2022-06-28').toISOString()],
         //[new Date('2022-08-01').toISOString(), new Date('2022-08-30').toISOString()],
         //[new Date('2022-01-01').toISOString(), new Date('2022-03-30').toISOString()], 
