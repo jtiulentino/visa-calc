@@ -14,10 +14,10 @@ function getDatesBetween(startDate, endDate) {
 
 const calc = () => {
     const startDate = new Date('2022-01-01');
-    const endDate = new Date('2022-10-28');
+    const endDate = new Date('2022-12-28');
     const dates = getDatesBetween(startDate, endDate);
 
-    const calcdates = getDatesBetween(new Date('2021-01-01'), new Date('2022-10-28'));
+    const calcdates = getDatesBetween(new Date('2022-01-01'), new Date('2023-12-28'));
     
     const dateToNumberMap = new Map();
 
@@ -28,11 +28,13 @@ const calc = () => {
     const counterArr = new Array(calcdates.length).fill(90)
     const dayExtraArr = new Array(calcdates.length).fill(0)
     const daysCanStay = new Array(calcdates.length).fill(0)
+    const transitions = new Array(calcdates.length).fill(0)
+    const wasThere = new Array(calcdates.length).fill(0)
 
     const periods = [
-        [new Date('2022-01-01').toISOString(), new Date('2022-02-28').toISOString()],
+        [new Date('2022-01-01').toISOString(), new Date('2022-01-28').toISOString()],
         //[new Date('2022-04-01').toISOString(), new Date('2022-04-28').toISOString()], 
-        //[new Date('2022-07-01').toISOString(), new Date('2022-10-28').toISOString()],
+        //[new Date('2022-06-01').toISOString(), new Date('2022-06-28').toISOString()],
         //[new Date('2022-08-01').toISOString(), new Date('2022-08-30').toISOString()],
         //[new Date('2022-01-01').toISOString(), new Date('2022-03-30').toISOString()], 
     ]
@@ -48,44 +50,54 @@ const calc = () => {
 
         for (let index = indexStart; index <= indexEnd; index++) {
             var back_index = index + 180
+            wasThere[index] = 1
             if (back_index < dayExtraArr.length) {
                 dayExtraArr[back_index] = 1
             }
             for (let i = index; i < index + 180; i++) {
                 counterArr[i] -= 1
             }
+            for (let i = index; i < index + 180; i++) {
+                transitions[index] = -1
+                transitions[index + 180] = 1
+            }
         }
     })
 
-    console.log('counterarr', counterArr)
-    counterArr.forEach((e, index) => {
+    var sum = 0
+    const cumSum = transitions.map((sum = 90, n => sum += n));
+    //console.log('counterarr', counterArr)
+    cumSum.forEach((e, index) => {
         var remainder = e
         if (e <= 0) {
             return 0
         }
         var days = 1
         for (let i = index + 1; i < index + 90; i++) {
-            if (index > counterArr.length) {
+            if (i> counterArr.length) {
                 break
             }
             days += 1;
             remainder -= 1
-            remainder += dayExtraArr[index] //add a day if we get one back from 180 days ago
+            if (i>= 180) {
+                remainder += wasThere[i-180] //add a day if we get one back from 180 days ago
+            }
             if (remainder <= 0) {
                 break
             }
 
         }
         daysCanStay[index] = days
-
-
-
     })
 
 
     var arr = []
     //dates.forEach((e) => { arr.push({ date: e.toISOString(), pv: counterArr[dateToNumberMap.get(e.toISOString())] }) })
+    //new Date('2022-03-28').toISOString()
+    //const cumulativeSum = (sum => value => sum += value)(0);
+
     dates.forEach((e) => { arr.push({ date: e.toISOString(), pv: daysCanStay[dateToNumberMap.get(e.toISOString())] }) })
+    //dates.forEach((e) => { arr.push({ date: e.toISOString(), pv: cumSum[dateToNumberMap.get(e.toISOString())] }) })
     return arr
 }
 
