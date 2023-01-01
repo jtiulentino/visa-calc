@@ -92,12 +92,12 @@ const calc = () => {
 
 
     var arr = []
-    //dates.forEach((e) => { arr.push({ date: e.toISOString(), pv: counterArr[dateToNumberMap.get(e.toISOString())] }) })
+    //dates.forEach((e) => { arr.push({ date: e.toISOString(), remainingDays: counterArr[dateToNumberMap.get(e.toISOString())] }) })
     //new Date('2022-03-28').toISOString()
     //const cumulativeSum = (sum => value => sum += value)(0);
 
-    dates.forEach((e) => { arr.push({ date: e.toLocaleDateString(), pv: daysCanStay[dateToNumberMap.get(e.toISOString())] }) })
-    //dates.forEach((e) => { arr.push({ date: e.toISOString(), pv: cumSum[dateToNumberMap.get(e.toISOString())] }) })
+    dates.forEach((e) => { arr.push({ date: e.toLocaleDateString(), remainingDays: daysCanStay[dateToNumberMap.get(e.toISOString())] }) })
+    //dates.forEach((e) => { arr.push({ date: e.toISOString(), remainingDays: cumSum[dateToNumberMap.get(e.toISOString())] }) })
     return arr
 }
 
@@ -132,9 +132,9 @@ function Chart() {
             <BarChart
                 data={data}
                 margin={{
-                    top: 5,
+                    top: 30,
                     right: 30,
-                    left: 10,
+                    left: 30,
                     bottom: 5,
                 }}
                 onMouseMove={handleMouseMove}
@@ -145,7 +145,7 @@ function Chart() {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="pv" fill="#8884d8" />
+                <Bar dataKey="remainingDays" fill="#8884d8" />
                 {refAreaLeft && refAreaRight ? (
                     <ReferenceArea x1={refAreaLeft} x2={refAreaRight} strokeOpacity={0.5} />
                 ) : null}
