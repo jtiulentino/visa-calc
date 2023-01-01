@@ -22,7 +22,7 @@ const calc = () => {
     const dateToNumberMap = new Map();
 
     var i = 0
-    calcdates.forEach((e) => dateToNumberMap.set(e.toISOString(), i));
+    calcdates.forEach((e) => dateToNumberMap.set(e.toISOString(), i++));
     console.log('map', dateToNumberMap)
 
     const counterArr = new Array(calcdates.length).fill(90)
@@ -43,7 +43,7 @@ const calc = () => {
         var indexEnd = dateToNumberMap.get(end)
         console.log('st', start, end, indexStart, indexEnd)
 
-        for (let index = indexStart; index <= indexEnd; index) {
+        for (let index = indexStart; index <= indexEnd; index++) {
             for (let i = index; i < index+180; i++) {
                 counterArr[i] -= 1
             }
@@ -81,8 +81,8 @@ function Chart() {
         }
     }
 
-    // const data = calc();
-    const data = null;
+    const data = calc();
+    // const data = null;
 
     return (
         <ResponsiveContainer>
