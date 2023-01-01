@@ -26,11 +26,14 @@ const calc = () => {
     console.log('map', dateToNumberMap)
 
     const counterArr = new Array(calcdates.length).fill(90)
+    const dayExtraArr = new Array(calcdates.length).fill(0)
+    const daysCanStay = new Array(calcdates.length).fill(0)
 
     const periods = [
-        [new Date('2022-01-01').toISOString(), new Date('2022-02-28').toISOString()], 
-        //[new Date('2022-01-01').toISOString(), new Date('2022-02-28').toISOString()], 
-        [new Date('2022-04-26').toISOString(), new Date('2022-05-30').toISOString()],
+        [new Date('2022-01-01').toISOString(), new Date('2022-02-28').toISOString()],
+        //[new Date('2022-04-01').toISOString(), new Date('2022-04-28').toISOString()], 
+        //[new Date('2022-07-01').toISOString(), new Date('2022-10-28').toISOString()],
+        //[new Date('2022-08-01').toISOString(), new Date('2022-08-30').toISOString()],
         //[new Date('2022-01-01').toISOString(), new Date('2022-03-30').toISOString()], 
     ]
 
@@ -44,17 +47,45 @@ const calc = () => {
         console.log('st', start, end, indexStart, indexEnd)
 
         for (let index = indexStart; index <= indexEnd; index++) {
-            for (let i = index; i < index+180; i++) {
+            var back_index = index + 180
+            if (back_index < dayExtraArr.length) {
+                dayExtraArr[back_index] = 1
+            }
+            for (let i = index; i < index + 180; i++) {
                 counterArr[i] -= 1
             }
         }
+    })
+
+    console.log('counterarr', counterArr)
+    counterArr.forEach((e, index) => {
+        var remainder = e
+        if (e <= 0) {
+            return 0
+        }
+        var days = 1
+        for (let i = index + 1; i < index + 90; i++) {
+            if (index > counterArr.length) {
+                break
+            }
+            days += 1;
+            remainder -= 1
+            remainder += dayExtraArr[index] //add a day if we get one back from 180 days ago
+            if (remainder <= 0) {
+                break
+            }
+
+        }
+        daysCanStay[index] = days
+
 
 
     })
 
 
     var arr = []
-    dates.forEach((e) => { arr.push({ date: e.toISOString(), pv: counterArr[dateToNumberMap.get(e.toISOString())] }) })
+    //dates.forEach((e) => { arr.push({ date: e.toISOString(), pv: counterArr[dateToNumberMap.get(e.toISOString())] }) })
+    dates.forEach((e) => { arr.push({ date: e.toISOString(), pv: daysCanStay[dateToNumberMap.get(e.toISOString())] }) })
     return arr
 }
 
