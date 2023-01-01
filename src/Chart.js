@@ -96,7 +96,7 @@ const calc = () => {
     //new Date('2022-03-28').toISOString()
     //const cumulativeSum = (sum => value => sum += value)(0);
 
-    dates.forEach((e) => { arr.push({ date: e.toISOString(), pv: daysCanStay[dateToNumberMap.get(e.toISOString())] }) })
+    dates.forEach((e) => { arr.push({ date: e.toLocaleDateString(), pv: daysCanStay[dateToNumberMap.get(e.toISOString())] }) })
     //dates.forEach((e) => { arr.push({ date: e.toISOString(), pv: cumSum[dateToNumberMap.get(e.toISOString())] }) })
     return arr
 }
